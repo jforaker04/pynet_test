@@ -17,4 +17,4 @@
         commit_changes: True
         replace_config: False
         diff_file: "{{ eapi_hostname }}.diff"
-        get_diffs: True
+        #get_diffs: True

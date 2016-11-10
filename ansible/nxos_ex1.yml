@@ -1,0 +1,48 @@
+---
+
+- name: NAPALM NX-OS Interface configuration
+  hosts: nxos3
+  gather_facts: False
+  tasks:
+    - nxos_ip_interface:
+        host: "{{ host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        transport: nxapi        
+        interface: "{{ item.intf }}" 
+        version: v4
+        state: present
+        addr: "{{ item.addr }}"
+        mask: 24
+      with_items:
+        - {intf: Ethernet2/1, addr: 10.100.100.1}
+
+- name: NAPALM NX-OS Interface configuration
+  hosts: nxos4
+  gather_facts: False
+  tasks:
+    - nxos_ip_interface:
+        host: "{{ host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        transport: nxapi
+        interface: "{{ item.intf }}"
+        version: v4
+        state: present
+        addr: "{{ item.addr }}"
+        mask: 24
+      with_items:
+        - {intf: Ethernet2/1, addr: 10.100.100.2}
+
+    - name: Nexus Ping
+      nxos_ping:
+        host: "{{ host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        transport: nxapi
+        dest: 10.100.100.1
+        count: 5
+        vrf: default
+      register: output
+
+    - debug: msg="{{ output }}"
